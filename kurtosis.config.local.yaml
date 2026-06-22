@@ -1,0 +1,133 @@
+participants:
+  - el_type: reth
+    el_image: reth:ssz-engine-api-test
+    cl_type: prysm
+    cl_image: prysm-bn-custom-image:engine-ssz
+    vc_image: prysm-vc-custom-image:engine-ssz
+    supernode: true
+    count: 2
+    el_extra_params:
+      - --engine.enable-ssz-proxy
+    cl_extra_params:
+      - --subscribe-all-subnets
+      - --verbosity=debug
+    vc_extra_params:
+      - --verbosity=debug
+
+  - el_type: reth
+    el_image: reth:ssz-engine-api-test
+    cl_type: prysm
+    cl_image: prysm-bn-custom-image:engine-ssz
+    vc_image: prysm-vc-custom-image:engine-ssz
+    supernode: false
+    count: 1
+    prometheus_config:
+      scrape_interval: 15s
+      labels:
+        variant: ssz-rest
+    el_extra_params:
+      - --engine.enable-ssz-proxy
+    cl_extra_params:
+      - --subscribe-all-subnets
+      - --verbosity=debug
+      - --engine-ssz-http
+    vc_extra_params:
+      - --verbosity=debug
+
+  - el_type: reth
+    el_image: reth:ssz-engine-api-test
+    cl_type: prysm
+    cl_image: prysm-bn-custom-image:engine-ssz
+    vc_image: prysm-vc-custom-image:engine-ssz
+    supernode: false
+    count: 1
+    prometheus_config:
+      scrape_interval: 15s
+      labels:
+        variant: no-ssz-rest
+    el_extra_params:
+      - --engine.enable-ssz-proxy
+    cl_extra_params:
+      - --subscribe-all-subnets
+      - --verbosity=debug
+    vc_extra_params:
+      - --verbosity=debug
+
+  - el_type: erigon
+    el_image: test/erigon:engine-ssz-793
+    cl_type: prysm
+    cl_image: prysm-bn-custom-image:engine-ssz
+    vc_image: prysm-vc-custom-image:engine-ssz
+    supernode: true
+    count: 2
+    cl_extra_params:
+      - --subscribe-all-subnets
+      - --verbosity=debug
+    vc_extra_params:
+      - --verbosity=debug
+
+  - el_type: erigon
+    el_image: test/erigon:engine-ssz-793
+    cl_type: prysm
+    cl_image: prysm-bn-custom-image:engine-ssz
+    vc_image: prysm-vc-custom-image:engine-ssz
+    supernode: false
+    count: 1
+    prometheus_config:
+      scrape_interval: 15s
+      labels:
+        variant: ssz-rest
+    cl_extra_params:
+      - --subscribe-all-subnets
+      - --verbosity=debug
+      - --engine-ssz-http
+    vc_extra_params:
+      - --verbosity=debug
+
+  - el_type: erigon
+    el_image: test/erigon:engine-ssz-793
+    cl_type: prysm
+    cl_image: prysm-bn-custom-image:engine-ssz
+    vc_image: prysm-vc-custom-image:engine-ssz
+    supernode: false
+    count: 1
+    prometheus_config:
+      scrape_interval: 15s
+      labels:
+        variant: no-ssz-rest
+    cl_extra_params:
+      - --subscribe-all-subnets
+      - --verbosity=debug
+    vc_extra_params:
+      - --verbosity=debug
+
+network_params:
+
+  capella_fork_epoch: 0
+  deneb_fork_epoch: 2
+  electra_fork_epoch: 4
+  fulu_fork_epoch: 6
+  gloas_fork_epoch: 8
+  genesis_delay: 40
+  seconds_per_slot: 12
+
+additional_services:
+  - dora
+  - spamoor
+  - prometheus
+  - grafana
+
+dora_params:
+  image: ethpandaops/dora:latest
+
+# Generate normal EL transactions and blob transactions so payloads are non-empty.
+spamoor_params:
+  spammers:
+    - scenario: eoatx
+      config:
+        throughput: 10
+    - scenario: blobs
+      config:
+        throughput: 2
+
+global_log_level: debug

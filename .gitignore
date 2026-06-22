@@ -1,0 +1,24 @@
+# Downloaded tools and release archives
+/kurtosis.exe
+/kurtosis-cli*.tar.gz
+/kurtosis-checksums.txt
+
+# Downloaded client source trees
+/.client-sources/
+/reth-oss/
+/prysm/
+/erigon/
+/erigon-engine-ssz-793/
+
+# Local secrets and generated API responses
+/jwt.hex
+/*.jwt.hex
+/*.ssz
+/engine-ssz-comparison/
+/*.headers
+
+# Local agent state
+/.agents/
+/scripts/completions/
+.DS_Store
+Thumbs.db
