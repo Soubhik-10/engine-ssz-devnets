@@ -104,12 +104,12 @@ participants:
 network_params:
 
   capella_fork_epoch: 0
-  deneb_fork_epoch: 2
-  electra_fork_epoch: 4
-  fulu_fork_epoch: 6
-  gloas_fork_epoch: 8
+  deneb_fork_epoch: 1
+  electra_fork_epoch: 2
+  fulu_fork_epoch: 3
+  gloas_fork_epoch: 4
   genesis_delay: 40
-  seconds_per_slot: 12
+  seconds_per_slot: 6
 
 additional_services:
   - dora

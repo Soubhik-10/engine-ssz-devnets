@@ -129,5 +129,5 @@ make compare-engine-ssz
 ## Configuration
 
 The network topology and fork schedule are defined in
-[`kurtosis.config.local.yaml`](kurtosis.config.local.yaml). Slots are eight
-seconds, with post-Merge forks activated in two-epoch steps.
+[`kurtosis.config.local.yaml`](kurtosis.config.local.yaml). The comparison
+script uses the same fork epochs and slot duration as this configuration.

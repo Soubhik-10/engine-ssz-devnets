@@ -6,7 +6,7 @@ RETH_SERVICE="${RETH_SERVICE:-el-1-reth-prysm}"
 ERIGON_SERVICE="${ERIGON_SERVICE:-el-5-erigon-prysm}"
 FROM_BLOCK="${FROM_BLOCK:-}"
 COUNT="${COUNT:-10}"
-SECONDS_PER_SLOT="${SECONDS_PER_SLOT:-8}"
+SECONDS_PER_SLOT="${SECONDS_PER_SLOT:-6}"
 SLOTS_PER_EPOCH="${SLOTS_PER_EPOCH:-32}"
 OUTPUT_DIR="${OUTPUT_DIR:-engine-ssz-comparison}"
 FIXTURE_DIR="${FIXTURE_DIR:-engine-ssz-fixtures}"
@@ -141,13 +141,27 @@ skip_fixture() {
 fork_epoch() {
   case "$1" in
     paris) printf '0' ;;
-    shanghai) printf '2' ;;
-    cancun) printf '4' ;;
-    prague) printf '6' ;;
-    osaka) printf '8' ;;
-    amsterdam) printf '10' ;;
+    shanghai) printf '0' ;;
+    cancun) printf '1' ;;
+    prague) printf '2' ;;
+    osaka) printf '3' ;;
+    amsterdam) printf '4' ;;
     *) return 1 ;;
   esac
+}
+
+fork_has_block_window() {
+  local fork=$1 activation next_activation
+  activation=$(fork_epoch "$fork")
+  case "$fork" in
+    paris) next_activation=$(fork_epoch shanghai) ;;
+    shanghai) next_activation=$(fork_epoch cancun) ;;
+    cancun) next_activation=$(fork_epoch prague) ;;
+    prague) next_activation=$(fork_epoch osaka) ;;
+    osaka) next_activation=$(fork_epoch amsterdam) ;;
+    amsterdam) return 0 ;;
+  esac
+  ((next_activation > activation))
 }
 
 fork_is_active() {
@@ -161,6 +175,13 @@ skip_future_fork() {
   activation=$(fork_epoch "$fork")
   printf '%sSKIP    %-48s %s activates at epoch %s; current epoch is %s%s\n' \
     "$YELLOW" "$route" "$fork" "$activation" "$current_epoch" "$RESET"
+  skipped=$((skipped + 1))
+}
+
+skip_empty_fork_window() {
+  local route=$1 fork=$2
+  printf '%sSKIP    %-48s %s has no block window in this fork schedule%s\n' \
+    "$YELLOW" "$route" "$fork" "$RESET"
   skipped=$((skipped + 1))
 }
 
@@ -299,6 +320,10 @@ done
 
 printf '%s== Payload Bodies By Range ==%s\n' "$CYAN" "$RESET"
 for fork in "${FORKS[@]}"; do
+  if ! fork_has_block_window "$fork"; then
+    skip_empty_fork_window "/engine/v2/$fork/bodies" "$fork"
+    continue
+  fi
   if ! fork_is_active "$fork"; then
     skip_future_fork "/engine/v2/$fork/bodies" "$fork"
     continue
@@ -316,6 +341,10 @@ done
 
 printf '%s== Payload Bodies By Hash (live block hash) ==%s\n' "$CYAN" "$RESET"
 for fork in "${FORKS[@]}"; do
+  if ! fork_has_block_window "$fork"; then
+    skip_empty_fork_window "/engine/v2/$fork/bodies/hash" "$fork"
+    continue
+  fi
   if ! fork_is_active "$fork"; then
     skip_future_fork "/engine/v2/$fork/bodies/hash" "$fork"
     continue
@@ -360,6 +389,10 @@ done
 
 printf '%s== Payload Submission ==%s\n' "$CYAN" "$RESET"
 for fork in "${FORKS[@]}"; do
+  if ! fork_has_block_window "$fork"; then
+    skip_empty_fork_window "/engine/v2/$fork/payloads" "$fork"
+    continue
+  fi
   if ! fork_is_active "$fork"; then
     skip_future_fork "/engine/v2/$fork/payloads" "$fork"
     continue
@@ -375,6 +408,10 @@ echo
 
 printf '%s== Forkchoice Updated ==%s\n' "$CYAN" "$RESET"
 for fork in "${FORKS[@]}"; do
+  if ! fork_has_block_window "$fork"; then
+    skip_empty_fork_window "/engine/v2/$fork/forkchoice" "$fork"
+    continue
+  fi
   if ! fork_is_active "$fork"; then
     skip_future_fork "/engine/v2/$fork/forkchoice" "$fork"
     continue
@@ -390,6 +427,10 @@ echo
 
 printf '%s== Get Payload ==%s\n' "$CYAN" "$RESET"
 for fork in "${FORKS[@]}"; do
+  if ! fork_has_block_window "$fork"; then
+    skip_empty_fork_window "/engine/v2/$fork/payloads/{payloadId}" "$fork"
+    continue
+  fi
   if ! fork_is_active "$fork"; then
     skip_future_fork "/engine/v2/$fork/payloads/{payloadId}" "$fork"
     continue
