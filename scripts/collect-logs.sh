@@ -40,7 +40,7 @@ for service in "${services[@]}"; do
   output="$LOG_DIR/$safe_name.log"
   raw_output="$temporary_dir/$safe_name.log"
   printf '%-48s -> %s\n' "$service" "$output"
-  if "$KURTOSIS" service logs "$ENCLAVE" "$service" > "$raw_output" 2>&1; then
+  if "$KURTOSIS" service logs --all "$ENCLAVE" "$service" > "$raw_output" 2>&1; then
     # Remove ANSI terminal styling before writing plain-text log files.
     sed $'s/\033\[[0-?]*[ -\/]*[@-~]//g' "$raw_output" > "$output"
   else

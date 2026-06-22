@@ -73,8 +73,9 @@ make stop
 
 ## Collect service logs
 
-Save every EL, CL, and VC service to a separate plain-text file named after the
-service. ANSI terminal color sequences are removed automatically:
+Save the complete available log history for every EL, CL, and VC service to a
+separate plain-text file named after the service. ANSI terminal color sequences
+are removed automatically:
 
 ```bash
 make logs
