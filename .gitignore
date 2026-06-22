@@ -15,6 +15,7 @@
 /*.jwt.hex
 /*.ssz
 /engine-ssz-comparison/
+/logs/
 /*.headers
 
 # Local agent state

@@ -71,6 +71,21 @@ Remove the enclave:
 make stop
 ```
 
+## Collect service logs
+
+Save every Kurtosis user service to a separate file named after the service:
+
+```bash
+make logs
+```
+
+Logs are written to `logs/engine-ssz/<service-name>.log`. Override the enclave
+or destination when needed:
+
+```bash
+make logs ENCLAVE=another-enclave LOG_DIR=logs/another
+```
+
 ## Compare Reth and Erigon
 
 Run the Engine API comparison harness:

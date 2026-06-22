@@ -1,4 +1,5 @@
 ENCLAVE_NAME := engine-ssz
+ENCLAVE ?= $(ENCLAVE_NAME)
 ETHEREUM_PACKAGE := github.com/ethpandaops/ethereum-package
 CONFIG_FILE := kurtosis.config
 KURTOSIS ?= kurtosis
@@ -28,6 +29,10 @@ stop:
 .PHONY: compare-engine-ssz
 compare-engine-ssz:
 	"$(BASH)" ./scripts/compare-engine-ssz.sh
+
+.PHONY: logs
+logs:
+	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" "$(BASH)" ./scripts/collect-logs.sh
 
 .PHONY: download-docker-sources
 download-docker-sources:
