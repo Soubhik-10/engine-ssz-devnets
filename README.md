@@ -73,9 +73,9 @@ make stop
 
 ## Collect service logs
 
-Save the complete available log history for every EL, CL, and VC service to a
-separate plain-text file named after the service. ANSI terminal color sequences
-are removed automatically:
+Save the latest 6,000 lines for every EL, CL, and VC service to a separate
+plain-text file named after the service. ANSI terminal color sequences are
+removed automatically:
 
 ```bash
 make logs
@@ -92,6 +92,12 @@ Set `INCLUDE_ALL=1` to include auxiliary services such as Dora and Grafana:
 
 ```bash
 make logs INCLUDE_ALL=1
+```
+
+Override the per-service line limit with `LOG_LINES`:
+
+```bash
+make logs LOG_LINES=10000
 ```
 
 ## Compare Reth and Erigon
