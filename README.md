@@ -73,7 +73,8 @@ make stop
 
 ## Collect service logs
 
-Save every Kurtosis user service to a separate file named after the service:
+Save every EL, CL, and VC service to a separate plain-text file named after the
+service. ANSI terminal color sequences are removed automatically:
 
 ```bash
 make logs
@@ -84,6 +85,12 @@ or destination when needed:
 
 ```bash
 make logs ENCLAVE=another-enclave LOG_DIR=logs/another
+```
+
+Set `INCLUDE_ALL=1` to include auxiliary services such as Dora and Grafana:
+
+```bash
+make logs INCLUDE_ALL=1
 ```
 
 ## Compare Reth and Erigon
