@@ -88,10 +88,16 @@ or destination when needed:
 make logs ENCLAVE=another-enclave LOG_DIR=logs/another
 ```
 
-Set `INCLUDE_ALL=1` to include auxiliary services such as Dora and Grafana:
+Collect the complete available history for every client:
 
 ```bash
 make make-logs-all
+```
+
+Set `INCLUDE_ALL=1` to include auxiliary services such as Dora and Grafana:
+
+```bash
+make make-logs-all INCLUDE_ALL=1
 ```
 
 Override the per-service line limit with `LOG_LINES`:

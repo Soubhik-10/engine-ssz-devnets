@@ -2,6 +2,7 @@ ENCLAVE_NAME := engine-ssz
 ENCLAVE ?= $(ENCLAVE_NAME)
 LOG_LINES ?= 6000
 INCLUDE_ALL ?= 0
+LOG_ALL ?= 0
 ETHEREUM_PACKAGE := github.com/ethpandaops/ethereum-package
 CONFIG_FILE := kurtosis.config
 KURTOSIS ?= kurtosis
@@ -34,11 +35,11 @@ compare-engine-ssz:
 
 .PHONY: logs
 logs:
-	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" LOG_LINES="$(LOG_LINES)" INCLUDE_ALL="$(INCLUDE_ALL)" "$(BASH)" ./scripts/collect-logs.sh
+	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" LOG_LINES="$(LOG_LINES)" LOG_ALL="$(LOG_ALL)" INCLUDE_ALL="$(INCLUDE_ALL)" "$(BASH)" ./scripts/collect-logs.sh
 
 .PHONY: make-logs-all
 make-logs-all:
-	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" LOG_LINES="$(LOG_LINES)" INCLUDE_ALL="1" "$(BASH)" ./scripts/collect-logs.sh
+	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" LOG_ALL="1" INCLUDE_ALL="$(INCLUDE_ALL)" "$(BASH)" ./scripts/collect-logs.sh
 
 .PHONY: download-docker-sources
 download-docker-sources:

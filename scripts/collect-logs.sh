@@ -7,6 +7,7 @@ KURTOSIS="${KURTOSIS:-kurtosis}"
 LOG_DIR="${LOG_DIR:-logs/$ENCLAVE}"
 INCLUDE_ALL="${INCLUDE_ALL:-0}"
 LOG_LINES="${LOG_LINES:-6000}"
+LOG_ALL="${LOG_ALL:-0}"
 
 mkdir -p "$LOG_DIR"
 inspect_file="$LOG_DIR/_enclave-inspect.txt"
@@ -36,12 +37,18 @@ fi
 echo "Collecting ${#services[@]} service logs into $LOG_DIR/"
 failures=0
 
+if [[ "$LOG_ALL" == 1 ]]; then
+  log_args=(--all)
+else
+  log_args=(--num "$LOG_LINES")
+fi
+
 for service in "${services[@]}"; do
   safe_name=${service//\//_}
   output="$LOG_DIR/$safe_name.log"
   raw_output="$temporary_dir/$safe_name.log"
   printf '%-48s -> %s\n' "$service" "$output"
-  if "$KURTOSIS" service logs --num "$LOG_LINES" "$ENCLAVE" "$service" > "$raw_output" 2>&1; then
+  if "$KURTOSIS" service logs "${log_args[@]}" "$ENCLAVE" "$service" > "$raw_output" 2>&1; then
     # Remove ANSI terminal styling before writing plain-text log files.
     sed $'s/\033\[[0-?]*[ -\/]*[@-~]//g' "$raw_output" > "$output"
   else
