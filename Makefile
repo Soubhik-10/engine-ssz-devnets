@@ -36,6 +36,10 @@ compare-engine-ssz:
 logs:
 	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" LOG_LINES="$(LOG_LINES)" INCLUDE_ALL="$(INCLUDE_ALL)" "$(BASH)" ./scripts/collect-logs.sh
 
+.PHONY: make-logs-all
+make-logs-all:
+	ENCLAVE="$(ENCLAVE)" KURTOSIS="$(KURTOSIS)" LOG_LINES="$(LOG_LINES)" INCLUDE_ALL="1" "$(BASH)" ./scripts/collect-logs.sh
+
 .PHONY: download-docker-sources
 download-docker-sources:
 	"$(BASH)" ./scripts/download-docker-sources.sh

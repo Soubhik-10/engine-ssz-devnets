@@ -91,7 +91,7 @@ make logs ENCLAVE=another-enclave LOG_DIR=logs/another
 Set `INCLUDE_ALL=1` to include auxiliary services such as Dora and Grafana:
 
 ```bash
-make logs INCLUDE_ALL=1
+make make-logs-all
 ```
 
 Override the per-service line limit with `LOG_LINES`:
